@@ -409,6 +409,48 @@
     .philosophy .wrap{ grid-template-columns:1fr; }
   }
 
+  /* ---------- founders ---------- */
+  .founders-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:var(--space-3);
+    margin-top:var(--space-4);
+  }
+  .founder-figure{
+    position:relative;
+    aspect-ratio:4/5;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    background:var(--panel);
+    overflow:hidden;
+  }
+  .founder-figure img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center;
+  }
+  .founder-figure .tag{
+    position:absolute;
+    bottom:var(--space-2);
+    left:var(--space-2);
+    right:var(--space-2);
+    background:rgba(21,18,15,0.55);
+    backdrop-filter:blur(3px);
+    padding:0.4rem 0.6rem;
+    border-radius:var(--radius);
+  }
+  .founder-figure .tag span{ color:var(--surface-dark-ink) !important; }
+  .founder-figure .tag .tick-line,
+  .founder-figure .tag .tick-line::before,
+  .founder-figure .tag .tick-line::after{ background:var(--surface-dark-ink); }
+  @media (max-width: 820px){
+    .founders-grid{ grid-template-columns:repeat(2, 1fr); }
+  }
+  @media (max-width: 560px){
+    .founders-grid{ grid-template-columns:1fr; max-width:420px; margin-inline:auto; }
+  }
+
   /* ---------- process ---------- */
   .process-grid{
     display:grid;
@@ -604,6 +646,7 @@
     </a>
     <div class="nav-right">
       <nav class="nav-links" id="navLinks">
+        <a href="#founders" data-i18n="nav.founders">founders</a>
         <a href="#work" data-i18n="nav.work">work</a>
         <a href="#process" data-i18n="nav.process">process</a>
         <a href="#contact" data-i18n="nav.contact">contact</a>
@@ -666,10 +709,49 @@
     </div>
   </section>
 
+  <!-- FOUNDERS -->
+  <section class="section" id="founders">
+    <div class="wrap">
+      <p class="eyebrow" data-i18n="founders.eyebrow">sheet 02 — founders</p>
+      <h2 data-i18n="founders.h2">three hands, one bench.</h2>
+      <p class="lede" data-i18n="founders.lede">sonobe is built by three founding partners who design, draw, and make every piece together — by hand.</p>
+
+      <div class="founders-grid">
+        <div class="founder-figure">
+          <span class="corner tl"></span><span class="corner br"></span>
+          <img src="sonobe-owner-juan.jpg" alt="Juan, founding partner of sonobe">
+          <div class="tag dim-line">
+            <span data-i18n="founders.juan.name">juan</span>
+            <span class="tick-line"></span>
+            <span data-i18n="founders.juan.role">founding partner</span>
+          </div>
+        </div>
+        <div class="founder-figure">
+          <span class="corner tl"></span><span class="corner br"></span>
+          <img src="sonobe-david.jpg" alt="David, founding partner of sonobe">
+          <div class="tag dim-line">
+            <span data-i18n="founders.david.name">david</span>
+            <span class="tick-line"></span>
+            <span data-i18n="founders.david.role">founding partner</span>
+          </div>
+        </div>
+        <div class="founder-figure">
+          <span class="corner tl"></span><span class="corner br"></span>
+          <img src="sonobe-julio.jpg" alt="Julio, founding partner of sonobe">
+          <div class="tag dim-line">
+            <span data-i18n="founders.julio.name">julio</span>
+            <span class="tick-line"></span>
+            <span data-i18n="founders.julio.role">founding partner</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- PROCESS -->
   <section class="section" id="process">
     <div class="wrap">
-      <p class="eyebrow" data-i18n="process.eyebrow">sheet 02 — process</p>
+      <p class="eyebrow" data-i18n="process.eyebrow">sheet 03 — process</p>
       <h2 data-i18n="process.h2">from sketch to install.</h2>
       <p class="lede" data-i18n="process.lede">a real sequence, three stages, usually 6–10 weeks depending on complexity.</p>
 
@@ -696,7 +778,7 @@
   <!-- WORK -->
   <section class="section" id="work">
     <div class="wrap">
-      <p class="eyebrow" data-i18n="work.eyebrow">sheet 03 — selected work</p>
+      <p class="eyebrow" data-i18n="work.eyebrow">sheet 04 — selected work</p>
       <h2 data-i18n="work.h2">elevation drawings.</h2>
       <p class="lede" data-i18n="work.lede">a sample of pieces in development. photography of finished work goes here as each project is completed and installed.</p>
 
@@ -827,7 +909,7 @@
   <section class="section" id="contact">
     <div class="wrap">
       <div class="contact-info">
-        <p class="eyebrow" data-i18n="contact.eyebrow">sheet 04 — start a project</p>
+        <p class="eyebrow" data-i18n="contact.eyebrow">sheet 05 — start a project</p>
         <h2 data-i18n="contact.h2">tell us about<br>the room.</h2>
         <p data-i18n="contact.lede">send a few details and we'll follow up to set up a measure &amp; talk session.</p>
 
@@ -888,6 +970,7 @@
     "nav.work": { en: "work", es: "trabajos" },
     "nav.process": { en: "process", es: "proceso" },
     "nav.contact": { en: "contact", es: "contacto" },
+    "nav.founders": { en: "founders", es: "fundadores" },
     "nav.cta": { en: "start a project", es: "iniciar un proyecto" },
     "nav.homeLabel": { en: "sonobe — home", es: "sonobe — inicio" },
     "nav.toggleLabel": { en: "toggle menu", es: "abrir menú" },
@@ -902,12 +985,22 @@
     "heroFigure.name": { en: "juan", es: "juan" },
     "heroFigure.role": { en: "founder &amp; woodworker", es: "fundador y carpintero" },
 
+    "founders.eyebrow": { en: "sheet 02 — founders", es: "lámina 02 — fundadores" },
+    "founders.h2": { en: "three hands, one bench.", es: "tres pares de manos, un mismo banco." },
+    "founders.lede": { en: "sonobe is built by three founding partners who design, draw, and make every piece together — by hand.", es: "sonobe lo construyen tres socios fundadores que diseñan, dibujan y fabrican cada pieza juntos — a mano." },
+    "founders.juan.name": { en: "juan", es: "juan" },
+    "founders.juan.role": { en: "founding partner", es: "socio fundador" },
+    "founders.david.name": { en: "david", es: "david" },
+    "founders.david.role": { en: "founding partner", es: "socio fundador" },
+    "founders.julio.name": { en: "julio", es: "julio" },
+    "founders.julio.role": { en: "founding partner", es: "socio fundador" },
+
     "philosophy.eyebrow": { en: "sheet 01 — studio", es: "lámina 01 — estudio" },
     "philosophy.h2": { en: "built around the room,<br>not the catalog.", es: "diseñado para el espacio,<br>no para el catálogo." },
     "philosophy.p1": { en: "every piece starts as a conversation, not a product listing. we measure the actual space, talk through how you'll really use the piece, and design around the real constraints — a stair turn, a low ceiling, a left-handed reader, a dog that needs to fit underneath.", es: "cada pieza empieza como una conversación, no como una ficha de producto. medimos el espacio real, conversamos sobre cómo se va a usar de verdad la pieza, y diseñamos alrededor de las limitaciones reales — un giro de escalera, un techo bajo, alguien zurdo, un perro que necesita caber debajo." },
     "philosophy.p2": { en: "then it's built by hand, one piece at a time: solid wood, real joinery, finishes mixed to match. no veneer over particleboard, no two pieces exactly alike.", es: "luego se construye a mano, una pieza a la vez: madera maciza, ensambles reales, acabados mezclados a medida. nada de enchapado sobre aglomerado, ninguna pieza exactamente igual a otra." },
 
-    "process.eyebrow": { en: "sheet 02 — process", es: "lámina 02 — proceso" },
+    "process.eyebrow": { en: "sheet 03 — process", es: "lámina 03 — proceso" },
     "process.h2": { en: "from sketch to install.", es: "del boceto a la instalación." },
     "process.lede": { en: "a real sequence, three stages, usually 6–10 weeks depending on complexity.", es: "una secuencia real, tres etapas, normalmente de 6 a 10 semanas según la complejidad." },
     "process.step1.num": { en: "step 01", es: "paso 01" },
@@ -920,7 +1013,7 @@
     "process.step3.title": { en: "build &amp; install", es: "construcción e instalación" },
     "process.step3.text": { en: "built by hand in the workshop, then delivered and installed in the room it was designed for.", es: "construido a mano en el taller, luego entregado e instalado en el espacio para el que fue diseñado." },
 
-    "work.eyebrow": { en: "sheet 03 — selected work", es: "lámina 03 — trabajos seleccionados" },
+    "work.eyebrow": { en: "sheet 04 — selected work", es: "lámina 04 — trabajos seleccionados" },
     "work.h2": { en: "elevation drawings.", es: "planos de elevación." },
     "work.lede": { en: "a sample of pieces in development. photography of finished work goes here as each project is completed and installed.", es: "una muestra de piezas en desarrollo. aquí se agregará fotografía real conforme cada proyecto se complete e instale." },
 
@@ -939,7 +1032,7 @@
     "work.card6.material": { en: "solid walnut, hand-carved", es: "nogal macizo, tallado a mano" },
     "work.card6.dims": { en: "set of 3", es: "juego de 3" },
 
-    "contact.eyebrow": { en: "sheet 04 — start a project", es: "lámina 04 — iniciar un proyecto" },
+    "contact.eyebrow": { en: "sheet 05 — start a project", es: "lámina 05 — iniciar un proyecto" },
     "contact.h2": { en: "tell us about<br>the room.", es: "cuéntanos sobre<br>el espacio." },
     "contact.lede": { en: "send a few details and we'll follow up to set up a measure &amp; talk session.", es: "envíanos algunos detalles y te contactaremos para coordinar una sesión de medición y conversación." },
     "contact.emailLabel": { en: "email", es: "correo" },
