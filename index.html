@@ -397,6 +397,62 @@
     .hero-figure{ max-width:480px; margin-inline:auto; order:-1; }
   }
 
+  /* ---------- hero carousel ---------- */
+  .carousel-track{ position:absolute; inset:0; }
+  .carousel-slide{
+    position:absolute;
+    inset:0;
+    margin:0;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity 0.6s ease;
+  }
+  .carousel-slide.is-active{ opacity:1; pointer-events:auto; }
+  .carousel-slide img{ object-position:center 40%; }
+
+  .carousel-btn{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    z-index:3;
+    width:36px;
+    height:36px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(21,18,15,0.5);
+    color:var(--surface-dark-ink);
+    border:1px solid rgba(245,242,236,0.25);
+    border-radius:var(--radius);
+    font-size:1.3rem;
+    line-height:1;
+    cursor:pointer;
+    transition:background-color 0.2s ease, border-color 0.2s ease;
+  }
+  .carousel-btn:hover{ background:var(--accent); border-color:var(--accent); }
+  .carousel-btn.prev{ left:var(--space-2); }
+  .carousel-btn.next{ right:var(--space-2); }
+
+  .carousel-dots{
+    position:absolute;
+    top:var(--space-2);
+    right:var(--space-2);
+    z-index:3;
+    display:flex;
+    gap:7px;
+  }
+  .carousel-dot{
+    width:8px;
+    height:8px;
+    padding:0;
+    border-radius:50%;
+    border:1px solid var(--surface-dark-ink);
+    background:transparent;
+    cursor:pointer;
+    transition:background-color 0.2s ease;
+  }
+  .carousel-dot.is-active{ background:var(--surface-dark-ink); }
+
   /* ---------- philosophy ---------- */
   .philosophy .wrap{
     display:grid;
@@ -682,14 +738,43 @@
         </div>
       </div>
 
-      <div class="hero-figure">
+      <div class="hero-figure" id="heroCarousel" aria-roledescription="carousel" aria-label="sonobe founders">
         <span class="corner tl"></span><span class="corner tr"></span>
         <span class="corner bl"></span><span class="corner br"></span>
-        <img src="sonobe-owner-juan.jpg" alt="Juan, founder of sonobe, in the workshop">
-        <div class="tag dim-line">
-          <span data-i18n="heroFigure.name">juan</span>
-          <span class="tick-line"></span>
-          <span data-i18n="heroFigure.role">founder &amp; woodworker</span>
+
+        <div class="carousel-track">
+          <figure class="carousel-slide is-active">
+            <img src="sonobe-owner-juan.jpg" alt="Juan, founding partner of sonobe">
+            <figcaption class="tag dim-line">
+              <span data-i18n="founders.juan.name">juan</span>
+              <span class="tick-line"></span>
+              <span data-i18n="founders.juan.role">founding partner</span>
+            </figcaption>
+          </figure>
+          <figure class="carousel-slide">
+            <img src="sonobe-david.jpg" alt="David, founding partner of sonobe">
+            <figcaption class="tag dim-line">
+              <span data-i18n="founders.david.name">david</span>
+              <span class="tick-line"></span>
+              <span data-i18n="founders.david.role">founding partner</span>
+            </figcaption>
+          </figure>
+          <figure class="carousel-slide">
+            <img src="sonobe-julio.jpg" alt="Julio, founding partner of sonobe">
+            <figcaption class="tag dim-line">
+              <span data-i18n="founders.julio.name">julio</span>
+              <span class="tick-line"></span>
+              <span data-i18n="founders.julio.role">founding partner</span>
+            </figcaption>
+          </figure>
+        </div>
+
+        <button class="carousel-btn prev" type="button" data-i18n-attr="aria-label:carousel.prev" aria-label="previous founder">‹</button>
+        <button class="carousel-btn next" type="button" data-i18n-attr="aria-label:carousel.next" aria-label="next founder">›</button>
+        <div class="carousel-dots" role="group" data-i18n-attr="aria-label:carousel.label" aria-label="choose founder">
+          <button class="carousel-dot is-active" type="button" aria-label="juan"></button>
+          <button class="carousel-dot" type="button" aria-label="david"></button>
+          <button class="carousel-dot" type="button" aria-label="julio"></button>
         </div>
       </div>
     </div>
@@ -975,6 +1060,10 @@
     "nav.homeLabel": { en: "sonobe — home", es: "sonobe — inicio" },
     "nav.toggleLabel": { en: "toggle menu", es: "abrir menú" },
 
+    "carousel.prev": { en: "previous founder", es: "fundador anterior" },
+    "carousel.next": { en: "next founder", es: "fundador siguiente" },
+    "carousel.label": { en: "choose founder", es: "elegir fundador" },
+
     "hero.eyebrow": { en: "custom furniture studio", es: "estudio de diseño industrial" },
     "hero.h1": { en: "furniture drawn before it's <em>built.</em>", es: "el diseño llega primero. <em>la construcción después.</em>" },
     "hero.lede": { en: "sonobe designs and builds one-of-a-kind furniture — sketched, measured, and made for the exact room it's going into. solid wood, real joinery, nothing off a shelf.", es: "sonobe diseña y construye muebles únicos — bocetados, medidos y hechos para el espacio exacto donde van a vivir. madera maciza, ensambles reales, nada de catálogo." },
@@ -1120,6 +1209,36 @@
   });
 
   document.getElementById('year').textContent = new Date().getFullYear();
+
+  // ---------- hero founders carousel ----------
+  (function(){
+    const root = document.getElementById('heroCarousel');
+    if (!root) return;
+    const slides = Array.from(root.querySelectorAll('.carousel-slide'));
+    const dots = Array.from(root.querySelectorAll('.carousel-dot'));
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let index = 0;
+    let timer = null;
+
+    function show(n){
+      index = (n + slides.length) % slides.length;
+      slides.forEach((s, i) => s.classList.toggle('is-active', i === index));
+      dots.forEach((d, i) => d.classList.toggle('is-active', i === index));
+    }
+    function next(){ show(index + 1); }
+    function prev(){ show(index - 1); }
+    function start(){ if (reduce) return; stop(); timer = setInterval(next, 5000); }
+    function stop(){ if (timer) { clearInterval(timer); timer = null; } }
+
+    root.querySelector('.carousel-btn.next').addEventListener('click', () => { next(); start(); });
+    root.querySelector('.carousel-btn.prev').addEventListener('click', () => { prev(); start(); });
+    dots.forEach((d, i) => d.addEventListener('click', () => { show(i); start(); }));
+    root.addEventListener('mouseenter', stop);
+    root.addEventListener('mouseleave', start);
+
+    show(0);
+    start();
+  })();
 </script>
 
 </body>
