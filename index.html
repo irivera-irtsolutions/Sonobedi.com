@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<!--
+  =========================================================================
+  HOW TO CUSTOMIZE THIS DEMO
+
+  Everything visual — colors, fonts, spacing, corner roundness — is
+  controlled from ONE place: the ":root { ... }" block right below,
+  inside <style>. Change a value there and it updates everywhere on
+  the page automatically. You should not need to touch any other CSS
+  rule to restyle the site.
+
+    COLORS   → look for "1. COLORS" below. Default is a stone-grey theme
+               with a terracotta accent (pulled from the real "Talus"
+               chair photo). Two more full palettes are included as
+               comments — delete the "/*" and "*/" around one (and
+               comment out the default) to try it instantly.
+    FONTS    → look for "2. TYPE". Swap any Google Fonts name into the
+               --font-display / --font-body / --font-mono lines, and
+               update the <link href="https://fonts.googleapis.com/...">
+               a few lines down to load it.
+    SPACING  → "3. SPACING" controls the rhythm between sections —
+               raise/lower these to make the page feel tighter or airier.
+    SHAPE    → --radius controls corner roundness site-wide (0 = sharp).
+
+  Page content (copy, portfolio pieces, English/Spanish text) lives in
+  the HTML further down, and the EN/ES translations live together in
+  one "translations" object near the bottom <script> tag.
+  =========================================================================
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>sonobe — handcrafted custom furniture</title>
+<meta name="description" content="Sonobe designs and builds one-of-a-kind furniture, drawn and measured for the exact room it's going into.">
+<link rel="icon" href="sonobe-logo.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- FONTS: swap the family names below if you change --font-display / --font-body / --font-mono -->
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+
+  /* =======================================================================
+     DESIGN TOKENS — edit this block to restyle the whole site
+     ======================================================================= */
+  :root{
+
+    /* 1. COLORS -----------------------------------------------------------
+       Default: stone grey + terracotta. Background and panel tones are
+       pulled from the real cabinetry/wood-grain photos (warm grey, light
+       oak); the accent is pulled directly from the rust velvet chair in
+       the "Talus" product photo, so it ties back to real, shot work. */
+    --bg:        #E9E5DD;   /* page background — warm stone grey */
+    --panel:     #FFFFFF;   /* card / panel surfaces */
+    --panel-2:   #F4F1EA;   /* panel hover / elevated state */
+    --ink:       #221E1A;   /* primary text + headlines — warm charcoal */
+    --ink-dim:   #6F6859;   /* secondary / muted text, labels */
+    --accent:        #9B4225;  /* accent — buttons, links, dimension-line details (Talus chair rust, deepened for text contrast) */
+    --accent-hover:  #B8573A;  /* accent on hover */
+    --on-accent:     #FFFFFF;  /* text color used on top of the accent fill */
+    --line:      #D9D2C4;   /* hairline borders / dividers */
+
+    /* header + footer stay a dark "frame" regardless of the main palette,
+       since the logo artwork has a solid black background — this keeps
+       it blending seamlessly instead of showing a visible black box. */
+    --surface-dark:      #15120F;
+    --surface-dark-ink:  #F5F2EC;
+    --surface-dark-dim:  #9C968A;
+    --surface-dark-line: #2B2824;
+
+    /* --- alt palette: original all-black + brass (uncomment to try) ---
+    --bg:        #000000;
+    --panel:     #141210;
+    --panel-2:   #1d1a16;
+    --ink:       #F5F2EC;
+    --ink-dim:   #9C968A;
+    --accent:        #C9974F;
+    --accent-hover:  #DBA961;
+    --on-accent:     #15110A;
+    --line:      #2B2824;
+    --- */
+
+    /* --- alt palette: grey + walnut (quieter, no orange — uncomment to try) ---
+    --bg:        #E7E3DB;
+    --panel:     #FFFFFF;
+    --panel-2:   #F2EFE8;
+    --ink:       #25211C;
+    --ink-dim:   #756E60;
+    --accent:        #5B3A29;
+    --accent-hover:  #74503C;
+    --on-accent:     #FFFFFF;
+    --line:      #D7D1C3;
+    --- */
+
+    /* 2. TYPE --------------------------------------------------------------
+       display = headlines, body = paragraphs/UI, mono = labels & dimensions */
+    --font-display:'Outfit', sans-serif;
+    --font-body:'Inter', sans-serif;
+    --font-mono:'JetBrains Mono', monospace;
+
+    --fs-hero: clamp(2.4rem, 7vw, 5rem);
+    --fs-h2: clamp(1.7rem, 4vw, 2.6rem);
+    --fs-h3: clamp(1.05rem, 2vw, 1.3rem);
+    --fs-body: clamp(0.95rem, 1.3vw, 1.05rem);
+    --fs-small: 0.85rem;
+    --fs-mono: 0.72rem;
+
+    /* 3. SPACING — vertical rhythm between/within sections ----------------- */
+    --space-1: 0.5rem;
+    --space-2: 1rem;
+    --space-3: 1.5rem;
+    --space-4: 2.5rem;
+    --space-5: 4rem;
+    --space-6: 6rem;
+    --space-7: 9rem;
+
+    /* 4. LAYOUT & SHAPE ------------------------------------------------------ */
+    --maxw: 1180px;   /* max content width */
+    --radius: 3px;    /* corner roundness, site-wide. 0 = sharp corners */
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; }
+  }
+
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--font-body);
+    font-size:var(--fs-body);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  img{ max-width:100%; display:block; }
+
+  a{ color:inherit; text-decoration:none; }
+
+  :focus-visible{
+    outline:2px solid var(--accent);
+    outline-offset:3px;
+  }
+
+  .wrap{
+    max-width:var(--maxw);
+    margin-inline:auto;
+    padding-inline:var(--space-3);
+  }
+
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:var(--fs-mono);
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--accent);
+    display:flex;
+    align-items:center;
+    gap:var(--space-2);
+    margin-bottom:var(--space-2);
+  }
+  .eyebrow::before{
+    content:"";
+    width:18px;
+    height:1px;
+    background:var(--accent);
+    display:inline-block;
+  }
+
+  h1, h2, h3{
+    font-family:var(--font-display);
+    font-weight:600;
+    text-transform:lowercase;
+    letter-spacing:-0.01em;
+    color:var(--ink);
+  }
+
+  h2{ font-size:var(--fs-h2); margin-bottom:var(--space-3); }
+  h3{ font-size:var(--fs-h3); margin-bottom:var(--space-1); }
+
+  .section{ padding-block:var(--space-6); border-top:1px solid var(--line); }
+  .section .wrap > .section-head{ max-width:640px; }
+  .lede{ color:var(--ink-dim); max-width:560px; }
+
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:var(--space-1);
+    font-family:var(--font-mono);
+    font-size:var(--fs-mono);
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    padding:0.9rem 1.6rem;
+    border-radius:var(--radius);
+    border:1px solid var(--ink);
+    transition:background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    cursor:pointer;
+  }
+  .btn-primary{
+    background:var(--accent);
+    border-color:var(--accent);
+    color:var(--on-accent);
+  }
+  .btn-primary:hover{ background:var(--accent-hover); border-color:var(--accent-hover); }
+  .btn-ghost{
+    background:transparent;
+    color:var(--ink);
+  }
+  .btn-ghost:hover{ border-color:var(--accent); color:var(--accent); }
+
+  /* ---------- dimension line motif ---------- */
+  .dim-line{
+    display:flex;
+    align-items:center;
+    gap:0.5rem;
+    font-family:var(--font-mono);
+    font-size:var(--fs-mono);
+    color:var(--ink-dim);
+    letter-spacing:0.06em;
+  }
+  .dim-line .tick-line{
+    flex:1;
+    height:1px;
+    background:var(--ink-dim);
+    position:relative;
+  }
+  .dim-line .tick-line::before,
+  .dim-line .tick-line::after{
+    content:"";
+    position:absolute;
+    top:-4px;
+    width:1px;
+    height:9px;
+    background:var(--ink-dim);
+  }
+  .dim-line .tick-line::before{ left:0; }
+  .dim-line .tick-line::after{ right:0; }
+
+  /* ---------- nav ---------- */
+  .nav{
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:var(--surface-dark);
+    border-bottom:1px solid var(--surface-dark-line);
+  }
+  .nav .wrap{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding-block:var(--space-2);
+  }
+  .brand{ display:flex; align-items:center; gap:0.6rem; }
+  .brand img{ height:26px; width:auto; }
+
+  .nav-right{
+    display:flex;
+    align-items:center;
+    gap:var(--space-3);
+  }
+
+  .nav-links{
+    display:flex;
+    align-items:center;
+    gap:var(--space-4);
+    font-family:var(--font-mono);
+    font-size:var(--fs-mono);
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+  }
+  .nav-links a{ color:var(--surface-dark-dim); transition:color 0.2s ease; }
+  .nav-links a:hover{ color:var(--accent); }
+
+  .lang-toggle{
+    display:flex;
+    align-items:center;
+    gap:0.35rem;
+    font-family:var(--font-mono);
+    font-size:var(--fs-mono);
+    letter-spacing:0.06em;
+    color:var(--surface-dark-dim);
+  }
+  .lang-toggle button{
+    background:none;
+    border:none;
+    color:var(--surface-dark-dim);
+    cursor:pointer;
+    font-family:inherit;
+    font-size:inherit;
+    letter-spacing:inherit;
+    text-transform:uppercase;
+    padding:0.2rem 0.25rem;
+  }
+  .lang-toggle button.active{ color:var(--accent); }
+  .lang-toggle button:hover{ color:var(--surface-dark-ink); }
+  .lang-toggle .sep{ color:var(--surface-dark-line); }
+
+  .nav-toggle{
+    display:none;
+    background:none;
+    border:1px solid var(--surface-dark-line);
+    border-radius:var(--radius);
+    width:38px;
+    height:38px;
+    color:var(--surface-dark-ink);
+    font-size:1.1rem;
+    cursor:pointer;
+  }
+
+  @media (max-width: 760px){
+    .nav-links{
+      position:fixed;
+      inset:57px 0 auto 0;
+      flex-direction:column;
+      align-items:flex-start;
+      gap:var(--space-3);
+      background:var(--surface-dark);
+      border-bottom:1px solid var(--surface-dark-line);
+      padding:var(--space-4) var(--space-3);
+      transform:translateY(-110%);
+      transition:transform 0.25s ease;
+    }
+    .nav-links.open{ transform:translateY(0); }
+    .nav-toggle{ display:block; }
+    .nav-links .btn{ width:100%; justify-content:center; }
+  }
+
+  /* ---------- hero ---------- */
+  .hero{
+    padding-block: var(--space-6) var(--space-7);
+    position:relative;
+    overflow:hidden;
+  }
+  .hero .wrap{
+    display:grid;
+    grid-template-columns: 1fr 1.05fr;
+    gap:var(--space-5);
+    align-items:center;
+  }
+  .hero h1{
+    font-size:var(--fs-hero);
+    line-height:1.06;
+    margin-bottom:var(--space-3);
+  }
+  .hero h1 em{
+    font-style:normal;
+    color:var(--accent);
+  }
+  .hero .lede{ margin-bottom:var(--space-4); font-size:1.05rem; }
+  .hero-ctas{ display:flex; gap:var(--space-2); flex-wrap:wrap; margin-bottom:var(--space-4); }
+
+  .hero-figure{
+    position:relative;
+    aspect-ratio: 6 / 5;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    background:var(--panel);
+    overflow:hidden;
+  }
+  .hero-figure img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center 30%;
+    display:block;
+  }
+  .hero-figure .tag{
+    position:absolute;
+    bottom:var(--space-2);
+    left:var(--space-2);
+    right:var(--space-2);
+    background:rgba(21,18,15,0.55);
+    backdrop-filter:blur(3px);
+    padding:0.4rem 0.6rem;
+    border-radius:var(--radius);
+  }
+  .hero-figure .tag span{ color:var(--surface-dark-ink) !important; }
+  .hero-figure .tag .tick-line,
+  .hero-figure .tag .tick-line::before,
+  .hero-figure .tag .tick-line::after{ background:var(--surface-dark-ink); }
+  .corner{
+    position:absolute;
+    width:14px;
+    height:14px;
+    border:1px solid var(--accent);
+  }
+  .corner.tl{ top:-1px; left:-1px; border-right:none; border-bottom:none; }
+  .corner.tr{ top:-1px; right:-1px; border-left:none; border-bottom:none; }
+  .corner.bl{ bottom:-1px; left:-1px; border-right:none; border-top:none; }
+  .corner.br{ bottom:-1px; right:-1px; border-left:none; border-top:none; }
+
+  @media (max-width: 880px){
+    .hero .wrap{ grid-template-columns:1fr; }
+    .hero-figure{ max-width:480px; margin-inline:auto; order:-1; }
+  }
+
+  /* ---------- philosophy ---------- */
+  .philosophy .wrap{
+    display:grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap:var(--space-5);
+  }
+  .philosophy p + p{ margin-top:var(--space-2); }
+  .philosophy .lede{ max-width:none; font-size:1.05rem; color:var(--ink); }
+  @media (max-width: 760px){
+    .philosophy .wrap{ grid-template-columns:1fr; }
+  }
+
+  /* ---------- process ---------- */
+  .process-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:var(--space-4);
+    margin-top:var(--space-4);
+  }
+  .step{
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:var(--space-3);
+    background:var(--panel);
+  }
+  .step .step-num{
+    font-family:var(--font-mono);
+    font-size:var(--fs-mono);
+    color:var(--accent);
+    letter-spacing:0.1em;
+    display:block;
+    margin-bottom:var(--space-2);
+  }
+  .step p{ color:var(--ink-dim); font-size:var(--fs-small); }
+  @media (max-width: 820px){
+    .process-grid{ grid-template-columns:1fr; }
+  }
+
+  /* ---------- work / portfolio ---------- */
+  .work-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:var(--space-3);
+    margin-top:var(--space-4);
+  }
+  .spec-card{
+    position:relative;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:var(--space-3);
+    opacity:0;
+    transform:translateY(14px);
+    transition:opacity 0.5s ease, transform 0.5s ease, border-color 0.2s ease;
+  }
+  .spec-card.in-view{ opacity:1; transform:translateY(0); }
+  .spec-card:hover{ border-color:var(--accent); background:var(--panel-2); }
+  .spec-card .corner{ opacity:0; transition:opacity 0.2s ease; }
+  .spec-card:hover .corner{ opacity:1; }
+
+  .spec-icon{
+    width:100%;
+    aspect-ratio:4/3;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--ink-dim);
+    border-bottom:1px solid var(--line);
+    margin-bottom:var(--space-2);
+    padding-bottom:var(--space-2);
+    transition:color 0.2s ease;
+  }
+  .spec-card:hover .spec-icon{ color:var(--ink); }
+  .spec-icon svg{ width:62%; height:auto; }
+
+  .spec-num{
+    font-family:var(--font-mono);
+    font-size:var(--fs-mono);
+    color:var(--accent);
+    letter-spacing:0.08em;
+    display:block;
+    margin-bottom:0.35rem;
+  }
+  .spec-meta{
+    font-family:var(--font-mono);
+    font-size:var(--fs-mono);
+    color:var(--ink-dim);
+    margin-top:var(--space-1);
+    line-height:1.7;
+  }
+  .spec-meta span{ display:block; }
+
+  @media (max-width: 880px){
+    .work-grid{ grid-template-columns:repeat(2, 1fr); }
+  }
+  @media (max-width: 560px){
+    .work-grid{ grid-template-columns:1fr; }
+  }
+
+  .work-note{
+    margin-top:var(--space-3);
+    color:var(--ink-dim);
+    font-size:var(--fs-small);
+    font-style:normal;
+  }
+
+  /* ---------- contact ---------- */
+  .contact .wrap{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:var(--space-5);
+  }
+  .contact-info p{ color:var(--ink-dim); margin-bottom:var(--space-3); }
+  .contact-detail{ margin-bottom:var(--space-3); }
+  .contact-detail .label{
+    font-family:var(--font-mono);
+    font-size:var(--fs-mono);
+    color:var(--accent);
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    display:block;
+    margin-bottom:0.25rem;
+  }
+  .contact-detail a{ transition:color 0.2s ease; }
+  .contact-detail a:hover{ color:var(--accent); }
+
+  .social-row{ display:flex; gap:var(--space-2); margin-top:var(--space-3); }
+  .social-row a{
+    width:38px; height:38px;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    display:flex; align-items:center; justify-content:center;
+    transition:border-color 0.2s ease, color 0.2s ease;
+    color:var(--ink-dim);
+  }
+  .social-row a:hover{ border-color:var(--accent); color:var(--accent); }
+  .social-row svg{ width:16px; height:16px; }
+
+  form{ display:flex; flex-direction:column; gap:var(--space-2); }
+  .field label{
+    font-family:var(--font-mono);
+    font-size:var(--fs-mono);
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--ink-dim);
+    display:block;
+    margin-bottom:0.4rem;
+  }
+  .field input,
+  .field textarea{
+    width:100%;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    color:var(--ink);
+    font-family:var(--font-body);
+    font-size:var(--fs-body);
+    padding:0.8rem 0.9rem;
+    transition:border-color 0.2s ease;
+  }
+  .field input:focus,
+  .field textarea:focus{ border-color:var(--accent); outline:none; }
+  .field textarea{ min-height:120px; resize:vertical; }
+
+  .form-status{
+    font-family:var(--font-mono);
+    font-size:var(--fs-mono);
+    color:var(--accent);
+    min-height:1.2em;
+  }
+
+  @media (max-width: 760px){
+    .contact .wrap{ grid-template-columns:1fr; }
+  }
+
+  /* ---------- footer ---------- */
+  footer{
+    background:var(--surface-dark);
+    border-top:1px solid var(--surface-dark-line);
+    padding-block:var(--space-4);
+  }
+  footer .wrap{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:var(--space-2);
+  }
+  footer img{ height:18px; }
+  .footer-meta{
+    font-family:var(--font-mono);
+    font-size:var(--fs-mono);
+    color:var(--surface-dark-dim);
+    letter-spacing:0.04em;
+  }
+
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="#" class="brand" data-i18n-attr="aria-label:nav.homeLabel" aria-label="sonobe — home">
+      <img src="sonobe-logo.jpg" alt="sonobe">
+    </a>
+    <div class="nav-right">
+      <nav class="nav-links" id="navLinks">
+        <a href="#work" data-i18n="nav.work">work</a>
+        <a href="#process" data-i18n="nav.process">process</a>
+        <a href="#contact" data-i18n="nav.contact">contact</a>
+        <a href="#contact" class="btn btn-primary" data-i18n="nav.cta">start a project</a>
+      </nav>
+      <div class="lang-toggle" role="group" aria-label="language / idioma">
+        <button type="button" class="lang-btn active" data-lang="en">en</button>
+        <span class="sep" aria-hidden="true">/</span>
+        <button type="button" class="lang-btn" data-lang="es">es</button>
+      </div>
+      <button class="nav-toggle" id="navToggle" data-i18n-attr="aria-label:nav.toggleLabel" aria-label="toggle menu" aria-expanded="false" aria-controls="navLinks">☰</button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="wrap">
+      <div class="hero-copy">
+        <p class="eyebrow" data-i18n="hero.eyebrow">custom furniture studio</p>
+        <h1 data-i18n="hero.h1">furniture drawn before it's <em>built.</em></h1>
+        <p class="lede" data-i18n="hero.lede">sonobe designs and builds one-of-a-kind furniture — sketched, measured, and made for the exact room it's going into. solid wood, real joinery, nothing off a shelf.</p>
+        <div class="hero-ctas">
+          <a href="#work" class="btn btn-primary" data-i18n="hero.cta1">view the work</a>
+          <a href="#contact" class="btn btn-ghost" data-i18n="hero.cta2">start a project</a>
+        </div>
+        <div class="dim-line" style="max-width:320px;">
+          <span data-i18n="hero.dim1">sheet 00</span>
+          <span class="tick-line"></span>
+          <span data-i18n="hero.dim2">handcrafted, by hand</span>
+        </div>
+      </div>
+
+      <div class="hero-figure">
+        <span class="corner tl"></span><span class="corner tr"></span>
+        <span class="corner bl"></span><span class="corner br"></span>
+        <img src="sonobe-owner-juan.jpg" alt="Juan, founder of sonobe, in the workshop">
+        <div class="tag dim-line">
+          <span data-i18n="heroFigure.name">juan</span>
+          <span class="tick-line"></span>
+          <span data-i18n="heroFigure.role">founder &amp; woodworker</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHILOSOPHY -->
+  <section class="philosophy section" id="studio">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow" data-i18n="philosophy.eyebrow">sheet 01 — studio</p>
+        <h2 data-i18n="philosophy.h2">built around the room,<br>not the catalog.</h2>
+      </div>
+      <div>
+        <p class="lede" data-i18n="philosophy.p1">every piece starts as a conversation, not a product listing. we measure the actual space, talk through how you'll really use the piece, and design around the real constraints — a stair turn, a low ceiling, a left-handed reader, a dog that needs to fit underneath.</p>
+        <p class="lede" data-i18n="philosophy.p2">then it's built by hand, one piece at a time: solid wood, real joinery, finishes mixed to match. no veneer over particleboard, no two pieces exactly alike.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="section" id="process">
+    <div class="wrap">
+      <p class="eyebrow" data-i18n="process.eyebrow">sheet 02 — process</p>
+      <h2 data-i18n="process.h2">from sketch to install.</h2>
+      <p class="lede" data-i18n="process.lede">a real sequence, three stages, usually 6–10 weeks depending on complexity.</p>
+
+      <div class="process-grid">
+        <div class="step">
+          <span class="step-num" data-i18n="process.step1.num">step 01</span>
+          <h3 data-i18n="process.step1.title">measure &amp; talk</h3>
+          <p data-i18n="process.step1.text">we visit the space — or do it over a call — take real measurements, and talk through how the piece actually needs to function day to day.</p>
+        </div>
+        <div class="step">
+          <span class="step-num" data-i18n="process.step2.num">step 02</span>
+          <h3 data-i18n="process.step2.title">design &amp; sample</h3>
+          <p data-i18n="process.step2.text">sketches and a 3d model come first. then physical material samples — wood species, metal finish, upholstery — land in your hands before anything is cut.</p>
+        </div>
+        <div class="step">
+          <span class="step-num" data-i18n="process.step3.num">step 03</span>
+          <h3 data-i18n="process.step3.title">build &amp; install</h3>
+          <p data-i18n="process.step3.text">built by hand in the workshop, then delivered and installed in the room it was designed for.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORK -->
+  <section class="section" id="work">
+    <div class="wrap">
+      <p class="eyebrow" data-i18n="work.eyebrow">sheet 03 — selected work</p>
+      <h2 data-i18n="work.h2">elevation drawings.</h2>
+      <p class="lede" data-i18n="work.lede">a sample of pieces in development. photography of finished work goes here as each project is completed and installed.</p>
+
+      <div class="work-grid">
+
+        <article class="spec-card">
+          <span class="corner tl"></span><span class="corner br"></span>
+          <div class="spec-icon">
+            <svg viewBox="0 0 120 90" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+              <path d="M15 35 L105 35"/>
+              <path d="M15 35 L15 75"/>
+              <path d="M105 35 L70 75"/>
+              <path d="M15 75 L70 75" stroke-dasharray="2 4" opacity="0.5"/>
+            </svg>
+          </div>
+          <span class="spec-num">no. 01</span>
+          <h3 data-i18n="work.card1.title">cantilever table</h3>
+          <div class="spec-meta">
+            <span data-i18n="work.card1.material">white oak / blackened steel</span>
+            <span>72"l × 38"w × 30"h</span>
+          </div>
+        </article>
+
+        <article class="spec-card">
+          <span class="corner tl"></span><span class="corner br"></span>
+          <div class="spec-icon">
+            <svg viewBox="0 0 120 90" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+              <rect x="15" y="20" width="90" height="45"/>
+              <path d="M35 20 L35 65"/>
+              <path d="M60 20 L60 65"/>
+              <path d="M85 20 L85 65"/>
+              <path d="M20 65 L20 75"/>
+              <path d="M100 65 L100 75"/>
+            </svg>
+          </div>
+          <span class="spec-num">no. 02</span>
+          <h3 data-i18n="work.card2.title">dovetail credenza</h3>
+          <div class="spec-meta">
+            <span data-i18n="work.card2.material">walnut / brass pulls</span>
+            <span>64"l × 18"d × 30"h</span>
+          </div>
+        </article>
+
+        <article class="spec-card">
+          <span class="corner tl"></span><span class="corner br"></span>
+          <div class="spec-icon">
+            <svg viewBox="0 0 120 90" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+              <path d="M30 20 C20 35, 20 50, 35 55 L75 55 C90 50, 88 30, 78 22"/>
+              <path d="M35 55 L40 75"/>
+              <path d="M75 55 L72 75"/>
+              <path d="M40 75 L72 75" stroke-dasharray="2 4" opacity="0.5"/>
+            </svg>
+          </div>
+          <span class="spec-num">no. 03</span>
+          <h3 data-i18n="work.card3.title">bent-ply lounge chair</h3>
+          <div class="spec-meta">
+            <span data-i18n="work.card3.material">ash plywood / wool</span>
+            <span>30"w × 32"d × 28"h</span>
+          </div>
+        </article>
+
+        <article class="spec-card">
+          <span class="corner tl"></span><span class="corner br"></span>
+          <div class="spec-icon">
+            <svg viewBox="0 0 120 90" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+              <path d="M15 35 L105 35"/>
+              <path d="M20 35 L20 65"/>
+              <path d="M100 35 L100 65"/>
+              <path d="M50 35 L50 65"/>
+              <path d="M70 35 L70 65"/>
+            </svg>
+          </div>
+          <span class="spec-num">no. 04</span>
+          <h3 data-i18n="work.card4.title">mortise bench</h3>
+          <div class="spec-meta">
+            <span data-i18n="work.card4.material">reclaimed elm</span>
+            <span>54"l × 14"d × 18"h</span>
+          </div>
+        </article>
+
+        <article class="spec-card">
+          <span class="corner tl"></span><span class="corner br"></span>
+          <div class="spec-icon">
+            <svg viewBox="0 0 120 90" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+              <path d="M20 25 L100 25"/>
+              <path d="M25 45 L95 45"/>
+              <path d="M20 65 L100 65"/>
+              <path d="M30 25 L30 65" opacity="0.5"/>
+              <path d="M85 25 L85 65" opacity="0.5"/>
+            </svg>
+          </div>
+          <span class="spec-num">no. 05</span>
+          <h3 data-i18n="work.card5.title">floating shelf system</h3>
+          <div class="spec-meta">
+            <span data-i18n="work.card5.material">blackened steel / white oak</span>
+            <span data-i18n="work.card5.dims">configurable</span>
+          </div>
+        </article>
+
+        <article class="spec-card">
+          <span class="corner tl"></span><span class="corner br"></span>
+          <div class="spec-icon">
+            <svg viewBox="0 0 120 90" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+              <ellipse cx="30" cy="38" rx="13" ry="8"/>
+              <path d="M22 46 L20 65"/>
+              <path d="M38 46 L40 65"/>
+              <ellipse cx="62" cy="30" rx="16" ry="9"/>
+              <path d="M52 39 L49 65"/>
+              <path d="M72 39 L75 65"/>
+              <ellipse cx="95" cy="42" rx="11" ry="7"/>
+              <path d="M88 49 L87 65"/>
+              <path d="M102 49 L103 65"/>
+            </svg>
+          </div>
+          <span class="spec-num">no. 06</span>
+          <h3 data-i18n="work.card6.title">sculpted stool trio</h3>
+          <div class="spec-meta">
+            <span data-i18n="work.card6.material">solid walnut, hand-carved</span>
+            <span data-i18n="work.card6.dims">set of 3</span>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section" id="contact">
+    <div class="wrap">
+      <div class="contact-info">
+        <p class="eyebrow" data-i18n="contact.eyebrow">sheet 04 — start a project</p>
+        <h2 data-i18n="contact.h2">tell us about<br>the room.</h2>
+        <p data-i18n="contact.lede">send a few details and we'll follow up to set up a measure &amp; talk session.</p>
+
+        <div class="contact-detail">
+          <span class="label" data-i18n="contact.emailLabel">email</span>
+          <a href="mailto:hello@sonobedi.com">hello@sonobedi.com</a>
+        </div>
+        <div class="contact-detail">
+          <span class="label" data-i18n="contact.locationLabel">based in</span>
+          <span data-i18n="contact.locationValue">your city, your state</span>
+        </div>
+
+        <div class="social-row">
+          <a href="https://www.facebook.com/share/1BGpSh2psK/" target="_blank" rel="noopener" data-i18n-attr="aria-label:contact.fbLabel" aria-label="sonobe on facebook">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5 3.66 9.15 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.5-3.89 3.78-3.89 1.1 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.45 2.91h-2.33V22c4.78-.79 8.44-4.94 8.44-9.94Z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <form id="contactForm">
+        <div class="field">
+          <label for="name" data-i18n="form.name">name</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+        <div class="field">
+          <label for="email" data-i18n="form.email">email</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+        <div class="field">
+          <label for="message" data-i18n="form.message">tell us about your space / piece</label>
+          <textarea id="message" name="message" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" style="align-self:flex-start;" data-i18n="form.submit">send inquiry</button>
+        <p class="form-status" id="formStatus" role="status"></p>
+        <!--
+          NOTE TO DEVELOPER: this form is styled and functional in the browser
+          (shows a confirmation message) but is NOT wired to actually send email yet.
+          Before launch, connect it to a real handler — e.g. Formspree, or a
+          Cloudflare Pages Function — and replace the JS submit handler below
+          with a real fetch() POST to that endpoint.
+        -->
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <img src="sonobe-logo.jpg" alt="sonobe">
+    <span class="footer-meta">© <span id="year"></span> sonobe — <span data-i18n="footer.tagline">handcrafted furniture</span></span>
+  </div>
+</footer>
+
+<script>
+  // ---------- i18n ----------
+  const translations = {
+    "nav.work": { en: "work", es: "trabajos" },
+    "nav.process": { en: "process", es: "proceso" },
+    "nav.contact": { en: "contact", es: "contacto" },
+    "nav.cta": { en: "start a project", es: "iniciar un proyecto" },
+    "nav.homeLabel": { en: "sonobe — home", es: "sonobe — inicio" },
+    "nav.toggleLabel": { en: "toggle menu", es: "abrir menú" },
+
+    "hero.eyebrow": { en: "custom furniture studio", es: "estudio de diseño industrial" },
+    "hero.h1": { en: "furniture drawn before it's <em>built.</em>", es: "el diseño llega primero. <em>la construcción después.</em>" },
+    "hero.lede": { en: "sonobe designs and builds one-of-a-kind furniture — sketched, measured, and made for the exact room it's going into. solid wood, real joinery, nothing off a shelf.", es: "sonobe diseña y construye muebles únicos — bocetados, medidos y hechos para el espacio exacto donde van a vivir. madera maciza, ensambles reales, nada de catálogo." },
+    "hero.cta1": { en: "view the work", es: "ver los trabajos" },
+    "hero.cta2": { en: "start a project", es: "iniciar un proyecto" },
+    "hero.dim1": { en: "sheet 00", es: "lámina 00" },
+    "hero.dim2": { en: "handcrafted, by hand", es: "hecho a mano" },
+    "heroFigure.name": { en: "juan", es: "juan" },
+    "heroFigure.role": { en: "founder &amp; woodworker", es: "fundador y carpintero" },
+
+    "philosophy.eyebrow": { en: "sheet 01 — studio", es: "lámina 01 — estudio" },
+    "philosophy.h2": { en: "built around the room,<br>not the catalog.", es: "diseñado para el espacio,<br>no para el catálogo." },
+    "philosophy.p1": { en: "every piece starts as a conversation, not a product listing. we measure the actual space, talk through how you'll really use the piece, and design around the real constraints — a stair turn, a low ceiling, a left-handed reader, a dog that needs to fit underneath.", es: "cada pieza empieza como una conversación, no como una ficha de producto. medimos el espacio real, conversamos sobre cómo se va a usar de verdad la pieza, y diseñamos alrededor de las limitaciones reales — un giro de escalera, un techo bajo, alguien zurdo, un perro que necesita caber debajo." },
+    "philosophy.p2": { en: "then it's built by hand, one piece at a time: solid wood, real joinery, finishes mixed to match. no veneer over particleboard, no two pieces exactly alike.", es: "luego se construye a mano, una pieza a la vez: madera maciza, ensambles reales, acabados mezclados a medida. nada de enchapado sobre aglomerado, ninguna pieza exactamente igual a otra." },
+
+    "process.eyebrow": { en: "sheet 02 — process", es: "lámina 02 — proceso" },
+    "process.h2": { en: "from sketch to install.", es: "del boceto a la instalación." },
+    "process.lede": { en: "a real sequence, three stages, usually 6–10 weeks depending on complexity.", es: "una secuencia real, tres etapas, normalmente de 6 a 10 semanas según la complejidad." },
+    "process.step1.num": { en: "step 01", es: "paso 01" },
+    "process.step1.title": { en: "measure &amp; talk", es: "medir y conversar" },
+    "process.step1.text": { en: "we visit the space — or do it over a call — take real measurements, and talk through how the piece actually needs to function day to day.", es: "visitamos el espacio — o lo hacemos por videollamada — tomamos medidas reales y conversamos sobre cómo necesita funcionar la pieza en el día a día." },
+    "process.step2.num": { en: "step 02", es: "paso 02" },
+    "process.step2.title": { en: "design &amp; sample", es: "diseño y muestras" },
+    "process.step2.text": { en: "sketches and a 3d model come first. then physical material samples — wood species, metal finish, upholstery — land in your hands before anything is cut.", es: "primero llegan los bocetos y un modelo 3d. después, muestras físicas de materiales — especie de madera, acabado del metal, tapicería — antes de cortar nada." },
+    "process.step3.num": { en: "step 03", es: "paso 03" },
+    "process.step3.title": { en: "build &amp; install", es: "construcción e instalación" },
+    "process.step3.text": { en: "built by hand in the workshop, then delivered and installed in the room it was designed for.", es: "construido a mano en el taller, luego entregado e instalado en el espacio para el que fue diseñado." },
+
+    "work.eyebrow": { en: "sheet 03 — selected work", es: "lámina 03 — trabajos seleccionados" },
+    "work.h2": { en: "elevation drawings.", es: "planos de elevación." },
+    "work.lede": { en: "a sample of pieces in development. photography of finished work goes here as each project is completed and installed.", es: "una muestra de piezas en desarrollo. aquí se agregará fotografía real conforme cada proyecto se complete e instale." },
+
+    "work.card1.title": { en: "cantilever table", es: "mesa en voladizo" },
+    "work.card1.material": { en: "white oak / blackened steel", es: "roble blanco / acero ennegrecido" },
+    "work.card2.title": { en: "dovetail credenza", es: "credenza con cola de milano" },
+    "work.card2.material": { en: "walnut / brass pulls", es: "nogal / tiradores de latón" },
+    "work.card3.title": { en: "bent-ply lounge chair", es: "silla lounge de madera curvada" },
+    "work.card3.material": { en: "ash plywood / wool", es: "contrachapado de fresno / lana" },
+    "work.card4.title": { en: "mortise bench", es: "banca de espiga y mortaja" },
+    "work.card4.material": { en: "reclaimed elm", es: "olmo recuperado" },
+    "work.card5.title": { en: "floating shelf system", es: "sistema de repisas flotantes" },
+    "work.card5.material": { en: "blackened steel / white oak", es: "acero ennegrecido / roble blanco" },
+    "work.card5.dims": { en: "configurable", es: "configurable" },
+    "work.card6.title": { en: "sculpted stool trio", es: "trío de banquitos esculpidos" },
+    "work.card6.material": { en: "solid walnut, hand-carved", es: "nogal macizo, tallado a mano" },
+    "work.card6.dims": { en: "set of 3", es: "juego de 3" },
+
+    "contact.eyebrow": { en: "sheet 04 — start a project", es: "lámina 04 — iniciar un proyecto" },
+    "contact.h2": { en: "tell us about<br>the room.", es: "cuéntanos sobre<br>el espacio." },
+    "contact.lede": { en: "send a few details and we'll follow up to set up a measure &amp; talk session.", es: "envíanos algunos detalles y te contactaremos para coordinar una sesión de medición y conversación." },
+    "contact.emailLabel": { en: "email", es: "correo" },
+    "contact.locationLabel": { en: "based in", es: "ubicados en" },
+    "contact.locationValue": { en: "your city, your state", es: "tu ciudad, tu estado" },
+    "contact.fbLabel": { en: "sonobe on facebook", es: "sonobe en facebook" },
+
+    "form.name": { en: "name", es: "nombre" },
+    "form.email": { en: "email", es: "correo" },
+    "form.message": { en: "tell us about your space / piece", es: "cuéntanos sobre tu espacio / pieza" },
+    "form.submit": { en: "send inquiry", es: "enviar consulta" },
+    "form.status": { en: "thanks — we'll be in touch shortly.", es: "gracias — te contactaremos pronto." },
+
+    "footer.tagline": { en: "handcrafted furniture", es: "muebles hechos a mano" }
+  };
+
+  let currentLang = "en";
+
+  function setLanguage(lang){
+    currentLang = lang;
+    document.documentElement.lang = lang;
+
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+      const key = el.getAttribute("data-i18n");
+      if (translations[key] && translations[key][lang] !== undefined) {
+        el.innerHTML = translations[key][lang];
+      }
+    });
+
+    document.querySelectorAll("[data-i18n-attr]").forEach(el => {
+      el.getAttribute("data-i18n-attr").split("|").forEach(pair => {
+        const [attr, key] = pair.split(":");
+        if (translations[key] && translations[key][lang] !== undefined) {
+          el.setAttribute(attr, translations[key][lang]);
+        }
+      });
+    });
+
+    document.querySelectorAll(".lang-btn").forEach(btn => {
+      btn.classList.toggle("active", btn.getAttribute("data-lang") === lang);
+    });
+  }
+
+  document.querySelectorAll(".lang-btn").forEach(btn => {
+    btn.addEventListener("click", () => setLanguage(btn.getAttribute("data-lang")));
+  });
+
+  // mobile nav toggle
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => {
+    const isOpen = navLinks.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', isOpen);
+  });
+  navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  // scroll reveal for portfolio cards
+  const cards = document.querySelectorAll('.spec-card');
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    cards.forEach(card => observer.observe(card));
+  } else {
+    cards.forEach(card => card.classList.add('in-view'));
+  }
+
+  // contact form — front-end only placeholder (see NOTE in HTML above)
+  const form = document.getElementById('contactForm');
+  const status = document.getElementById('formStatus');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    status.textContent = translations["form.status"][currentLang];
+    form.reset();
+  });
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>
