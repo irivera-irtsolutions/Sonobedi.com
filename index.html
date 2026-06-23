@@ -27,7 +27,7 @@
   one "translations" object near the bottom <script> tag.
   =========================================================================
 -->
-<html lang="en">
+<html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -56,8 +56,8 @@
 <meta property="og:description" content="One-of-a-kind furniture built for your exact space. Handcrafted in Ciudad Juárez, serving El Paso TX and clients across the United States.">
 <meta property="og:image" content="https://sonobedi.com/sonobe-project-workspace-1.jpg">
 <meta property="og:image:alt" content="Sonobe custom walnut workspace — handcrafted furniture">
-<meta property="og:locale" content="en_US">
-<meta property="og:locale:alternate" content="es_MX">
+<meta property="og:locale" content="es_MX">
+<meta property="og:locale:alternate" content="en_US">
 <meta property="og:site_name" content="Sonobe">
 
 <!-- Twitter Card -->
@@ -843,9 +843,9 @@
         <a href="#contact" class="btn btn-primary" data-i18n="nav.cta">start a project</a>
       </nav>
       <div class="lang-toggle" role="group" aria-label="language / idioma">
-        <button type="button" class="lang-btn active" data-lang="en">en</button>
+        <button type="button" class="lang-btn" data-lang="en">en</button>
         <span class="sep" aria-hidden="true">/</span>
-        <button type="button" class="lang-btn" data-lang="es">es</button>
+        <button type="button" class="lang-btn active" data-lang="es">es</button>
       </div>
       <button class="nav-toggle" id="navToggle" data-i18n-attr="aria-label:nav.toggleLabel" aria-label="toggle menu" aria-expanded="false" aria-controls="navLinks">☰</button>
     </div>
@@ -1329,7 +1329,7 @@
     "footer.tagline": { en: "handcrafted furniture", es: "muebles hechos a mano" }
   };
 
-  let currentLang = "en";
+  let currentLang = "es";
 
   function setLanguage(lang){
     currentLang = lang;
@@ -1359,6 +1359,8 @@
   document.querySelectorAll(".lang-btn").forEach(btn => {
     btn.addEventListener("click", () => setLanguage(btn.getAttribute("data-lang")));
   });
+
+  setLanguage("es");
 
   // mobile nav toggle
   const navToggle = document.getElementById('navToggle');
